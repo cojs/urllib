@@ -1,0 +1,28 @@
+{
+  "name": "co-urllib",
+  "version": "0.0.1",
+  "description": "co wrapper for urllib",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dead-horse/co-urllib.git"
+  },
+  "keywords": [ "co", "urllib", "http", "urlopen", "curl", "wget", "request", "https" ],
+  "author": "dead_horse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dead-horse/co-urllib/issues"
+  },
+  "files": ["index.js"],
+  "homepage": "https://github.com/dead-horse/co-urllib",
+  "dependencies": {
+    "thunkify": "0.0.1",
+    "urllib": "0.5.5"
+  },
+  "devDependencies": {
+
+  }
+}
