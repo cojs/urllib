@@ -123,11 +123,12 @@ describe('index.test.js', function () {
   describe('options.rejectUnauthorized = ', function () {
     it('should ignore ssl check', function (done) {
       co(function *() {
-        var result = yield *urllib.request('https://www.npmjs.org', {
+        var result = yield *urllib.request('https://npmjs.org', {
+          timeout: 10000,
           rejectUnauthorized: false,
         });
         result.should.have.keys('data', 'status', 'headers');
-        result.status.should.equal(200);
+        // result.status.should.equal(200);
         result.data.should.be.a.Buffer;
         done();
       })();
@@ -151,6 +152,20 @@ describe('index.test.js', function () {
     });
   });
 
+  describe('options.writeStream = ', function () {
+    it('should save data to stream', function (done) {
+      co(function *() {
+        var result = yield *urllib.request(host + '/json', {
+          writeStream: fs.createWriteStream(__filename + '.out'),
+        });
+        result.should.have.keys('data', 'status', 'headers');
+        result.status.should.equal(200);
+        should.not.exist(result.data);
+        fs.readFileSync(__filename + '.out', 'utf8').should.equal('{"foo":"bar"}');
+        done();
+      })();
+    });
+  });
 
   describe('options.stream = ', function () {
     it('should send with stream', function (done) {

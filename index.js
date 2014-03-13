@@ -298,14 +298,9 @@ function *request(url, args) {
     debug('Request#%d %s: `req close` event emit', reqId, options.path);
   });
 
-  // if (writeStream) {
-  //   writeStream.on('close', done.bind(null, null, null, res));
-  //   return res.pipe(writeStream);
-  // }
-
   var data;
   try {
-    data = yield assertTimeout(readall(res), args.timeout);
+    data = yield assertTimeout(readall(res, args.writeStream), args.timeout);
   } catch (err) {
     err.requestId = reqId;
     if (err.status === 408) {
