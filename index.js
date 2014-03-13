@@ -258,9 +258,11 @@ function *request(url, args) {
   try {
     r = yield assertTimeout(_request(options, {body: body, stream: args.stream}), args.timeout);
   } catch (err) {
+    err.status = err.status || -1;
     if (err.status === 408) {
       err.name = 'ConnectionTimeoutError';
     }
+    err.headers = {};
     throw err;
   }
 
@@ -274,13 +276,18 @@ function *request(url, args) {
 
   if ((res.statusCode === 302 || res.statusCode === 301) && args.followRedirect) {  // handle redirect
     args._followRedirectCount = (args._followRedirectCount || 0) + 1;
+    var err = null;
     if (!res.headers.location) {
-      var err = new Error('Got statusCode ' + res.statusCode + ' but cannot resolve next location from headers');
+      err = new Error('Got statusCode ' + res.statusCode + ' but cannot resolve next location from headers');
       err.name = 'FollowRedirectError';
-      throw err;
     } else if (args._followRedirectCount > args.maxRedirects) {
-      var err = new Error('Exceeded ' + args.maxRedirects + ' maxRedirects. Probably stuck in a redirect loop ' + url);
+      err = new Error('Exceeded ' + args.maxRedirects + ' maxRedirects. Probably stuck in a redirect loop ' + url);
       err.name = 'MaxRedirectError';
+    }
+
+    if (err) {
+      err.status = res.statusCode;
+      err.headers = res.headers;
       throw err;
     }
 
@@ -303,16 +310,20 @@ function *request(url, args) {
     data = yield assertTimeout(readall(res, args.writeStream), args.timeout);
   } catch (err) {
     err.requestId = reqId;
+    err.status = err.status || res.statusCode;
     if (err.status === 408) {
       req.abort(); // try to abort response handle
       err.name = 'ResponseTimeoutError';
     }
+    err.headers = res.headers;
     throw err;
   }
 
   if (aborted) {
     var err = new Error('Remote socket was terminated before `response.end()` was called');
     err.name = 'RemoteSocketClosedError';
+    err.status = res.statusCode;
+    err.headers = res.headers;
     throw err;
   }
 
@@ -339,6 +350,8 @@ function *request(url, args) {
         data = JSON.parse(data);
       } catch (err) {
         err.name = 'JSONResponseFormatError';
+        err.status = res.statusCode;
+        err.headers = res.headers;
         throw err;
       }
     }
