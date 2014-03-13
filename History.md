@@ -1,4 +1,9 @@
 
+0.1.2 / 2014-03-13 
+==================
+
+  * JSONResponseFormatError should contains raw data
+
 0.1.1 / 2014-03-13 
 ==================
 

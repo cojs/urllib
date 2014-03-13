@@ -1,6 +1,6 @@
 {
   "name": "co-urllib",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "co version of urllib",
   "main": "index.js",
   "scripts": {
