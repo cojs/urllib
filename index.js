@@ -352,6 +352,7 @@ function *request(url, args) {
         err.name = 'JSONResponseFormatError';
         err.status = res.statusCode;
         err.headers = res.headers;
+        err.data = data;
         throw err;
       }
     }

@@ -317,6 +317,8 @@ describe('index.test.js', function () {
         e.name.should.equal('JSONResponseFormatError');
         e.status.should.equal(200);
         e.headers['content-type'].should.equal('text/plain; charset=utf-8');
+        e.data.should.be.a.Buffer;
+        e.data.toString().should.equal('{foo:bar}');
       }
     }));
   });
