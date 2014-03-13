@@ -17,6 +17,8 @@
 var koa = require('koa');
 var sleep = require('co-sleep');
 var middlewares = require('koa-middlewares');
+var speeds = require('speeds');
+var fs = require('fs');
 
 var app = koa();
 app.use(middlewares.bodyParser());
@@ -62,6 +64,20 @@ app.use(function *(next) {
   } else if (this.url === '/content-encoding') {
     this.set('content-encoding', 'foo');
     return this.body = new Buffer('bar');
+  } else if (this.url === '/slow') {
+    return this.body = fs.createReadStream(__filename).pipe(speeds(100));
+  } else if (this.url === '/res-connection-end') {
+    var res = this.res;
+    setTimeout(function () {
+      res.connection.end();
+    }, 2000);
+    return this.body = fs.createReadStream(__filename).pipe(speeds(100));
+  } else if (this.url === '/socket.destroy') {
+    var res = this.res;
+    setTimeout(function () {
+      res.destroy();
+    }, 2000);
+    return this.body = fs.createReadStream(__filename).pipe(speeds(100));
   }
 });
 

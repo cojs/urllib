@@ -25,6 +25,7 @@ var fs = require('fs');
 var zlib = require('zlib');
 var readall = require('co-readall');
 var assertTimeout = require('co-assert-timeout');
+var ua = require('default-user-agent');
 var gunzip = thunkify(zlib.gunzip);
 
 var pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json')));
@@ -70,7 +71,7 @@ function createRequest(httplib) {
 var httpRequest = createRequest(http);
 var httpsRequest = createRequest(https);
 
-var USER_AGENT = 'node-co-urllib/' + pkg.version;
+var USER_AGENT = ua('node-co-urllib', pkg.version);
 
 // change Agent.maxSockets to 1000
 exports.agent = new http.Agent();

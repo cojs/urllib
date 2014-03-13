@@ -67,10 +67,10 @@ describe('index.test.js', function () {
     });
   });
 
-  describe('options.agent = false', function () {
-    it('should work', function (done) {
+  describe('options.agent = false, httpsAgent = false', function () {
+    it('should work with http', function (done) {
       co(function *() {
-        var result = yield *urllib.request(host + '/json', {dataType: 'json'});
+        var result = yield *urllib.request(host + '/json', {dataType: 'json', agent: false});
         result.should.have.keys('data', 'status', 'headers');
         result.status.should.equal(200);
         result.data.should.be.an.Object;
@@ -79,9 +79,29 @@ describe('index.test.js', function () {
         done();
       })();
     });
+
+    it('should work with https', function (done) {
+      co(function *() {
+        var result = yield *urllib.request('https://npmjs.org', {httpsAgent: false, timeout: 10000});
+        result.should.have.keys('data', 'status', 'headers');
+        result.data.should.be.a.Buffer;
+        done();
+      })();
+    });
   });
 
   describe('header["user-agent"]', function () {
+    it('should got default user-agent', co(function *() {
+      var result = yield *urllib.request(host + '/ua', {
+        dataType: 'json',
+      });
+      result.should.have.keys('data', 'status', 'headers');
+      result.status.should.equal(200);
+      result.data.should.be.an.Object;
+      result.data.should.match({ua: /^node-co-urllib\/\d+\.\d+\.\d+ node\//});
+      result.headers['content-type'].should.equal('application/json');
+    }));
+
     it('should custom user-agent', function (done) {
       co(function *() {
         var result = yield *urllib.request(host + '/ua', {
@@ -341,16 +361,45 @@ describe('index.test.js', function () {
       })();
     });
 
-    it.skip('should throw ResponseTimeoutError', function (done) {
+    it('should throw ResponseTimeoutError', function (done) {
       co(function *() {
         try {
-          var result = yield *urllib.request(host + '/sleep', {timeout: 10});
+          var result = yield *urllib.request(host + '/slow', {timeout: 2000});
           done(new Error('should not run this'));
         } catch (e) {
           should.exist(e);
           e.status.should.equal(408);
-          e.name.should.equal('ConnectionTimeoutError');
-          e.message.should.equal('timeout of 10ms exceeded');
+          e.name.should.equal('ResponseTimeoutError');
+          e.message.should.equal('timeout of 2000ms exceeded');
+          done();
+        }
+      })();
+    });
+
+    it('should throw RemoteSocketClosedError', function (done) {
+      co(function *() {
+        try {
+          var result = yield *urllib.request(host + '/socket.destroy', {timeout: 20000});
+          done(new Error('should not run this'));
+        } catch (e) {
+          should.exist(e);
+          e.name.should.equal('RemoteSocketClosedError');
+          e.message.should.equal('Remote socket was terminated before `response.end()` was called');
+          done();
+        }
+      })();
+    });
+
+    it.skip('should throw mock res error', function (done) {
+      co(function *() {
+        try {
+          var result = yield *urllib.request(host + '/res-connection-end', {timeout: 20000});
+          done(new Error('should not run this'));
+        } catch (e) {
+          should.exist(e);
+          // console.log(e)
+          e.name.should.equal('RemoteSocketClosedError');
+          e.message.should.equal('Remote socket was terminated before `response.end()` was called');
           done();
         }
       })();
@@ -417,7 +466,7 @@ describe('index.test.js', function () {
   describe('http and https web site', function () {
     it('should get http://nodejs.org success', function (done) {
       co(function *() {
-        var result = yield *urllib.request('http://nodejs.org');
+        var result = yield *urllib.request('http://nodejs.org', {timeout: 10000});
         result.should.have.keys('data', 'status', 'headers');
         result.status.should.equal(200);
         result.data.should.be.a.Buffer;
