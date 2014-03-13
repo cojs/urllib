@@ -1,12 +1,11 @@
-var urllib = require('./');
-var co = require('co');
+'use strict';
 
-urllib.TIME_OUT = 300;
-urllib.agent.maxSockets = 10;
+var co = require('co');
+var urllib = require('./');
 
 co(function *() {
   var result = yield urllib.request('http://baidu.com');
-  var data = result[0]; // response data
-  var res = result[1]; // response object
-  console.log(res.statusCode);
+  var data = result.data; // response data
+  var headers = result.headers; // response headers
+  console.log(result.status, headers);
 })();
