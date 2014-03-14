@@ -71,7 +71,7 @@ function createRequest(httplib) {
 var httpRequest = createRequest(http);
 var httpsRequest = createRequest(https);
 
-var USER_AGENT = ua('node-co-urllib', pkg.version);
+var USER_AGENT = exports.USER_AGENT = ua('node-co-urllib', pkg.version);
 
 // change Agent.maxSockets to 1000
 exports.agent = new http.Agent();

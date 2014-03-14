@@ -33,6 +33,12 @@ describe('index.test.js', function () {
     });
   });
 
+  describe('USER_AGENT', function () {
+    it('should exports USER_AGENT', function () {
+      urllib.USER_AGENT.should.be.a.String;
+    });
+  });
+
   describe('RequestError', function () {
     it('should return RequestError when server destroy connection', co(function *() {
       try {
@@ -46,7 +52,7 @@ describe('index.test.js', function () {
       }
     }));
 
-    it.only('should return RequestError when domain not exists', co(function *() {
+    it('should return RequestError when domain not exists', co(function *() {
       try {
         var result = yield *urllib.request('http://foo.co-urllib.com', {dataType: 'json'});
         throw new Error('should not run this');
