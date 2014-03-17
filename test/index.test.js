@@ -16,7 +16,6 @@
 
 var thunkify = require('thunkify');
 var should = require('should');
-var co = require('co');
 var fs = require('fs');
 var gunzip = thunkify(require('zlib').gunzip);
 var urllib = require('../');
@@ -40,7 +39,7 @@ describe('index.test.js', function () {
   });
 
   describe('RequestError', function () {
-    it('should return RequestError when server destroy connection', co(function *() {
+    it('should return RequestError when server destroy connection', function *() {
       try {
         var result = yield *urllib.request(host + '/destroy', {dataType: 'json'});
         throw new Error('should not run this');
@@ -50,9 +49,9 @@ describe('index.test.js', function () {
         e.status.should.equal(-1);
         e.headers.should.eql({});
       }
-    }));
+    });
 
-    it('should return RequestError when domain not exists', co(function *() {
+    it('should return RequestError when domain not exists', function *() {
       try {
         var result = yield *urllib.request('http://foo.co-urllib.com', {dataType: 'json'});
         throw new Error('should not run this');
@@ -62,11 +61,11 @@ describe('index.test.js', function () {
         e.status.should.equal(-1);
         e.headers.should.eql({});
       }
-    }));
+    });
   });
 
   describe('options.beforeRequest', function () {
-    it('should change headers before send', co(function *() {
+    it('should change headers before send', function *() {
       var result = yield *urllib.request(host + '/ua', {
         dataType: 'json',
         beforeRequest: function (options) {
@@ -78,28 +77,28 @@ describe('index.test.js', function () {
       result.data.should.be.an.Object;
       result.data.should.eql({ua: 'fooagent'});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
   });
 
   describe('options.agent = false, httpsAgent = false', function () {
-    it('should work with http', co(function *() {
+    it('should work with http', function *() {
       var result = yield *urllib.request(host + '/json', {dataType: 'json', agent: false});
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(200);
       result.data.should.be.an.Object;
       result.data.should.eql({foo: 'bar'});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
 
-    it('should work with https', co(function *() {
+    it('should work with https', function *() {
       var result = yield *urllib.request('https://npmjs.org', {httpsAgent: false, timeout: 10000});
       result.should.have.keys('data', 'status', 'headers');
       result.data.should.be.a.Buffer;
-    }));
+    });
   });
 
   describe('header["user-agent"]', function () {
-    it('should got default user-agent', co(function *() {
+    it('should got default user-agent', function *() {
       var result = yield *urllib.request(host + '/ua', {
         dataType: 'json',
       });
@@ -108,9 +107,9 @@ describe('index.test.js', function () {
       result.data.should.be.an.Object;
       result.data.should.match({ua: /^node-co-urllib\/\d+\.\d+\.\d+ node\//});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
 
-    it('should custom user-agent', co(function *() {
+    it('should custom user-agent', function *() {
       var result = yield *urllib.request(host + '/ua', {
         dataType: 'json',
         headers: {
@@ -122,11 +121,11 @@ describe('index.test.js', function () {
       result.data.should.be.an.Object;
       result.data.should.eql({ua: 'testua'});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
   });
 
   describe('options.rejectUnauthorized = ', function () {
-    it('should ignore ssl check', co(function *() {
+    it('should ignore ssl check', function *() {
       var result = yield *urllib.request('https://npmjs.org', {
         timeout: 10000,
         rejectUnauthorized: false,
@@ -134,11 +133,11 @@ describe('index.test.js', function () {
       result.should.have.keys('data', 'status', 'headers');
       // result.status.should.equal(200);
       result.data.should.be.a.Buffer;
-    }));
+    });
   });
 
   describe('options.auth = ', function () {
-    it('should send with auth', co(function *() {
+    it('should send with auth', function *() {
       var result = yield *urllib.request(host + '/auth', {
         dataType: 'json',
         auth: 'foo:bar'
@@ -148,11 +147,11 @@ describe('index.test.js', function () {
       result.data.should.be.an.Object;
       result.data.should.eql({user: 'foo', pass: 'bar'});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
   });
 
   describe('options.writeStream = ', function () {
-    it('should save data to stream', co(function *() {
+    it('should save data to stream', function *() {
       var result = yield *urllib.request(host + '/json', {
         writeStream: fs.createWriteStream(__filename + '.out'),
       });
@@ -160,11 +159,11 @@ describe('index.test.js', function () {
       result.status.should.equal(200);
       should.not.exist(result.data);
       fs.readFileSync(__filename + '.out', 'utf8').should.equal('{"foo":"bar"}');
-    }));
+    });
   });
 
   describe('options.stream = ', function () {
-    it('should send with stream', co(function *() {
+    it('should send with stream', function *() {
       var result = yield *urllib.request(host + '/direct', {
         method: 'post',
         stream: fs.createReadStream(__filename),
@@ -174,11 +173,11 @@ describe('index.test.js', function () {
       result.data.should.be.a.Buffer;
       result.data.toString().should.equal(fs.readFileSync(__filename, 'utf8'));
       result.headers['content-type'].should.equal('application/octet-stream');
-    }));
+    });
   });
 
   describe('options.content = ', function () {
-    it('should send with buffer content', co(function *() {
+    it('should send with buffer content', function *() {
       var result = yield *urllib.request(host + '/direct', {
         method: 'post',
         dataType: 'json',
@@ -189,29 +188,29 @@ describe('index.test.js', function () {
       result.data.should.be.an.Object;
       result.data.should.eql({nick: '苏千'});
       result.headers['content-type'].should.equal('application/octet-stream');
-    }));
+    });
   });
 
   describe('options.followRedirect = true', function () {
-    it('should follow 302 redirect', co(function *() {
+    it('should follow 302 redirect', function *() {
       var result = yield *urllib.request(host + '/302', {
         followRedirect: true,
       });
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(204);
       should.not.exist(result.data);
-    }));
+    });
 
-    it('should follow 301 redirect', co(function *() {
+    it('should follow 301 redirect', function *() {
       var result = yield *urllib.request(host + '/301', {
         followRedirect: true,
       });
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(204);
       should.not.exist(result.data);
-    }));
+    });
 
-    it('should throw FollowRedirectError', co(function *() {
+    it('should throw FollowRedirectError', function *() {
       try {
         var result = yield *urllib.request(host + '/redirect_no_location', {
           followRedirect: true,
@@ -223,9 +222,9 @@ describe('index.test.js', function () {
         e.status.should.equal(302);
         e.should.have.property('headers');
       }
-    }));
+    });
 
-    it('should throw MaxRedirectError with default 10 max', co(function *() {
+    it('should throw MaxRedirectError with default 10 max', function *() {
       try {
         var result = yield *urllib.request(host + '/loop_redirect', {
           followRedirect: true,
@@ -237,9 +236,9 @@ describe('index.test.js', function () {
         e.status.should.equal(302);
         e.headers.location.should.equal('/loop_redirect');
       }
-    }));
+    });
 
-    it('should throw MaxRedirectError with default 1 max', co(function *() {
+    it('should throw MaxRedirectError with default 1 max', function *() {
       try {
         var result = yield *urllib.request(host + '/loop_redirect', {
           followRedirect: true,
@@ -252,29 +251,29 @@ describe('index.test.js', function () {
         e.status.should.equal(302);
         e.headers.location.should.equal('/loop_redirect');
       }
-    }));
+    });
   });
 
   describe('options.data = ', function () {
-    it('should get with querystring 1', co(function *() {
+    it('should get with querystring 1', function *() {
       var result = yield *urllib.request(host + '/qs?k=name', {dataType: 'json', data: {nick: '苏千'}});
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(200);
       result.data.should.be.an.Object;
       result.data.should.eql({nick: '苏千', k: 'name'});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
 
-    it('should get with querystring 2', co(function *() {
+    it('should get with querystring 2', function *() {
       var result = yield *urllib.request(host + '/qs', {dataType: 'json', data: {nick: '苏千'}});
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(200);
       result.data.should.be.an.Object;
       result.data.should.eql({nick: '苏千'});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
 
-    it('should post with form content', co(function *() {
+    it('should post with form content', function *() {
       var result = yield *urllib.request(host + '/post',
         {dataType: 'json', data: {nick: '苏千'}, method: 'POST'});
       result.should.have.keys('data', 'status', 'headers');
@@ -285,9 +284,9 @@ describe('index.test.js', function () {
         "content-type": "application/x-www-form-urlencoded"
       });
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
 
-    it('should post with json content', co(function *() {
+    it('should post with json content', function *() {
       var result = yield *urllib.request(host + '/post',
         {
           dataType: 'json', data: {nick: '苏千'}, method: 'post',
@@ -302,20 +301,20 @@ describe('index.test.js', function () {
         "content-type": "application/json"
       });
       result.headers['content-type'].should.equal('application/json');
-  }));
+    });
   });
 
   describe('options.dataType = json', function () {
-    it('should got json', co(function *() {
+    it('should got json', function *() {
       var result = yield *urllib.request(host + '/json', {dataType: 'json'});
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(200);
       result.data.should.be.an.Object;
       result.data.should.eql({foo: 'bar'});
       result.headers['content-type'].should.equal('application/json');
-    }));
+    });
 
-    it('should throw JSONResponseFormatError', co(function *() {
+    it('should throw JSONResponseFormatError', function *() {
       try {
         var result = yield *urllib.request(host + '/wrongjson', {dataType: 'json'});
         throw new Error('should not run this');
@@ -326,11 +325,11 @@ describe('index.test.js', function () {
         e.data.should.be.a.Buffer;
         e.data.toString().should.equal('{foo:bar}');
       }
-    }));
+    });
   });
 
   describe('options.timeout', function () {
-    it('should throw ConnectionTimeoutError', co(function *() {
+    it('should throw ConnectionTimeoutError', function *() {
       try {
         var result = yield *urllib.request(host + '/sleep', {timeout: 10});
         throw new Error('should not run this');
@@ -340,9 +339,9 @@ describe('index.test.js', function () {
         e.message.should.equal('timeout of 10ms exceeded');
         e.headers.should.eql({});
       }
-    }));
+    });
 
-    it('should throw ResponseTimeoutError', co(function *() {
+    it('should throw ResponseTimeoutError', function *() {
       try {
         var result = yield *urllib.request(host + '/slow', {timeout: 2000});
         throw new Error('should not run this');
@@ -353,9 +352,9 @@ describe('index.test.js', function () {
         e.message.should.equal('timeout of 2000ms exceeded');
         e.headers['content-type'].should.equal('application/octet-stream');
       }
-    }));
+    });
 
-    it('should throw RemoteSocketClosedError', co(function *() {
+    it('should throw RemoteSocketClosedError', function *() {
       try {
         var result = yield *urllib.request(host + '/socket.destroy', {timeout: 20000});
         throw new Error('should not run this');
@@ -366,9 +365,9 @@ describe('index.test.js', function () {
         e.status.should.equal(200);
         e.should.have.property('headers');
       }
-    }));
+    });
 
-    it('should throw mock res error', co(function *() {
+    it('should throw mock res error', function *() {
       try {
         var result = yield *urllib.request(host + '/res-connection-end', {timeout: 20000});
         throw new Error('should not run this');
@@ -380,11 +379,11 @@ describe('index.test.js', function () {
         e.status.should.equal(200);
         e.should.have.property('headers');
       }
-    }));
+    });
   });
 
   describe('options.gzip = true', function () {
-    it('should get gzip response and auto decode it', co(function *() {
+    it('should get gzip response and auto decode it', function *() {
       var result = yield *urllib.request('http://r.cnpmjs.org/byte', {
         dataType: 'json',
         gzip: true,
@@ -396,9 +395,9 @@ describe('index.test.js', function () {
       result.data.name.should.equal('byte');
       result.headers['content-type'].should.equal('application/json');
       result.headers['content-encoding'].should.equal('gzip');
-    }));
+    });
 
-    it('should get gzip response and decode custom', co(function *() {
+    it('should get gzip response and decode custom', function *() {
       var result = yield *urllib.request('http://r.cnpmjs.org/byte', {
         dataType: 'json',
         gzip: true,
@@ -415,9 +414,9 @@ describe('index.test.js', function () {
       result.headers['content-encoding'].should.equal('gzip');
       var buf = yield gunzip(result.data);
       JSON.parse(buf).name.should.equal('byte');
-    }));
+    });
 
-    it('should get response with content-encoding', co(function *() {
+    it('should get response with content-encoding', function *() {
       var result = yield *urllib.request(host + '/content-encoding', {
         dataType: 'json',
         gzip: true,
@@ -428,25 +427,25 @@ describe('index.test.js', function () {
       result.data.length.should.above(0);
       result.headers['content-encoding'].should.equal('foo');
       result.data.toString().should.equal('bar');
-    }));
+    });
   });
 
   describe('http and https web site', function () {
-    it('should get http://nodejs.org success', co(function *() {
+    it('should get http://nodejs.org success', function *() {
       var result = yield *urllib.request('http://nodejs.org', {timeout: 10000});
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(200);
       result.data.should.be.a.Buffer;
       result.data.length.should.above(0);
       result.headers['content-type'].should.equal('text/html');
-    }));
+    });
 
-    it('should get https://registry.npmjs.org success', co(function *() {
+    it('should get https://registry.npmjs.org success', function *() {
       var result = yield *urllib.request('https://registry.npmjs.org', {dataType: 'json', timeout: 10000});
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(200);
       result.data.should.be.an.Object;
       result.data.db_name.should.equal('registry');
-    }));
+    });
   });
 });

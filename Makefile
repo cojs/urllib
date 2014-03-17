@@ -12,6 +12,7 @@ jshint:
 test:
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--harmony \
+		--require co-mocha \
 		--reporter $(REPORTER) \
 		--timeout $(TIMEOUT) \
 		$(MOCHA_OPTS) \
@@ -21,6 +22,7 @@ test-cov cov:
 	@NODE_ENV=test node --harmony \
 		node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha \
 		-- -u exports \
+		--require co-mocha \
 		--reporter $(REPORTER) \
 		--timeout $(TIMEOUT) \
 		$(MOCHA_OPTS) \
