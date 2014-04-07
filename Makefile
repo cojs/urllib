@@ -17,7 +17,7 @@ build/%.js: lib/%.js
 	@$(BIN)regenerator --include-runtime $< > $@
 
 jshint: install
-	@$(BIN)jshint .
+	@$(BIN)jshint lib
 
 test: install
 	@NODE_ENV=test $(BIN)mocha \
