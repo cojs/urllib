@@ -9,12 +9,12 @@ BUILD = $(subst lib/,build/,$(SRC))
 install:
 	@npm install --registry=http://r.cnpmjs.org --disturl=http://dist.cnpmjs.org
 
-build: install
+build:
 	@mkdir -p build
-	$(MAKE) $(BUILD)
+	@$(MAKE) $(BUILD)
 
 build/%.js: lib/%.js
-	$(BIN)regenerator --include-runtime $< > $@
+	@$(BIN)regenerator --include-runtime $< > $@
 
 jshint: install
 	@$(BIN)jshint .
