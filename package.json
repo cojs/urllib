@@ -4,13 +4,23 @@
   "description": "co version of urllib",
   "main": "index.js",
   "scripts": {
-    "test": "make test-all"
+    "test": "make test-all",
+    "prepublish": "make clean build"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/dead-horse/co-urllib.git"
   },
-  "keywords": [ "co", "urllib", "http", "urlopen", "curl", "wget", "request", "https" ],
+  "keywords": [
+    "co",
+    "urllib",
+    "http",
+    "urlopen",
+    "curl",
+    "wget",
+    "request",
+    "https"
+  ],
   "author": "dead_horse",
   "license": "MIT",
   "bugs": {
@@ -20,8 +30,9 @@
   "dependencies": {
     "co-assert-timeout": "0.0.4",
     "co-readall": "0.0.1",
-    "debug": "0.7.4",
+    "debug": "0.8.0",
     "default-user-agent": "0.0.1",
+    "generator-supported": "0.0.1",
     "thunkify": "0.0.1"
   },
   "devDependencies": {
@@ -33,9 +44,10 @@
     "istanbul-harmony": "*",
     "jshint": "*",
     "koa": "0.5.2",
-    "koa-middlewares": "0.1.0",
+    "koa-middlewares": "0.1.3",
     "mocha": "*",
-    "should": "3.2.0-beta1",
+    "regenerator": "^0.4.6",
+    "should": "3.3.0",
     "speeds": "0.0.1"
   }
 }
