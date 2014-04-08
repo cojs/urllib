@@ -1,4 +1,10 @@
 
+0.2.0 / 2014-04-08
+==================
+
+ * use ali.regenerator to skip download esprima from github
+ * use regenerator, detect generator support
+
 0.1.4 / 2014-03-26
 ==================
 
