@@ -42,7 +42,7 @@ test-cov cov:
 test-all: install jshint test
 
 autod: install
-	@$(BIN)autod -w -e example.js
+	@$(BIN)autod -w -e example.js,callback_example.js
 	@$(MAKE) install
 
 contributors: install
