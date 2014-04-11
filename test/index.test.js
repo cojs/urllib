@@ -353,33 +353,6 @@ describe('index.test.js', function () {
         e.headers['content-type'].should.equal('application/octet-stream');
       }
     });
-
-    it('should throw RemoteSocketClosedError', function *() {
-      try {
-        var result = yield *urllib.request(host + '/socket.destroy', {timeout: 20000});
-        throw new Error('should not run this');
-      } catch (e) {
-        should.exist(e);
-        e.name.should.equal('RemoteSocketClosedError');
-        e.message.should.equal('Remote socket was terminated before `response.end()` was called');
-        e.status.should.equal(200);
-        e.should.have.property('headers');
-      }
-    });
-
-    it('should throw mock res error', function *() {
-      try {
-        var result = yield *urllib.request(host + '/res-connection-end', {timeout: 20000});
-        throw new Error('should not run this');
-      } catch (e) {
-        should.exist(e);
-        // console.log(e)
-        e.name.should.equal('RemoteSocketClosedError');
-        e.message.should.equal('Remote socket was terminated before `response.end()` was called');
-        e.status.should.equal(200);
-        e.should.have.property('headers');
-      }
-    });
   });
 
   describe('options.gzip = true', function () {
