@@ -1,4 +1,10 @@
 
+n.n.n / 2014-04-11 
+==================
+
+  * Merge pull request #6 from node-modules/remove-aborted
+  * remove res.aborted
+
 0.2.0 / 2014-04-08
 ==================
 
