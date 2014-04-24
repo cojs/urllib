@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/dead-horse/co-urllib.git"
+    "url": "git://github.com/cojs/urllib.git"
   },
   "keywords": [
     "co",
@@ -24,9 +24,9 @@
   "author": "dead_horse",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dead-horse/co-urllib/issues"
+    "url": "https://github.com/cojs/urllib/issues"
   },
-  "homepage": "https://github.com/dead-horse/co-urllib",
+  "homepage": "https://github.com/cojs/urllib",
   "dependencies": {
     "co-assert-timeout": "0.0.4",
     "co-readall": "0.0.1",

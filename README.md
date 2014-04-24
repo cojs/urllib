@@ -1,6 +1,8 @@
 co-urllib
 =========
 
+[![Build Status](https://travis-ci.org/cojs/urllib.svg)](https://travis-ci.org/cojs/urllib)
+
 co version of [urllib](https://github.com/fengmk2/urllib).
 
 Not just thunkify, `co-urllib.request` is a [Generator](http://wiki.ecmascript.org/doku.php?id=harmony:generators).
