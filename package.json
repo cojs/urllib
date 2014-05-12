@@ -28,27 +28,27 @@
   },
   "homepage": "https://github.com/cojs/urllib",
   "dependencies": {
-    "co-assert-timeout": "0.0.4",
-    "co-readall": "0.0.1",
-    "debug": "0.8.0",
-    "default-user-agent": "0.0.1",
-    "generator-supported": "0.0.1",
-    "thunkify": "0.0.1"
+    "co-assert-timeout": "~0.0.4",
+    "co-readall": "~0.0.1",
+    "debug": "~0.8.1",
+    "default-user-agent": "~0.0.1",
+    "generator-supported": "~0.0.1",
+    "thunkify": "~2.1.1"
   },
   "devDependencies": {
     "ali.regenerator": "*",
     "autod": "*",
-    "co": "3.0.5",
+    "co": "~3.0.6",
     "co-mocha": "*",
-    "co-sleep": "0.0.1",
+    "co-sleep": "~0.0.1",
     "contributors": "*",
     "cov": "*",
     "istanbul-harmony": "*",
     "jshint": "*",
-    "koa": "0.5.2",
-    "koa-middlewares": "0.1.3",
+    "koa": "~0.6.0",
+    "koa-middlewares": "~0.1.3",
     "mocha": "*",
-    "should": "3.3.0",
-    "speeds": "0.0.1"
+    "should": "~3.3.1",
+    "speeds": "~0.0.1"
   }
 }

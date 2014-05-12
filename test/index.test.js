@@ -45,7 +45,7 @@ describe('index.test.js', function () {
         throw new Error('should not run this');
       } catch (e) {
         e.name.should.equal('RequestError');
-        e.message.should.equal('socket hang up');
+        e.message.should.include('socket hang up (GET http://127.0.0.1:');
         e.status.should.equal(-1);
         e.headers.should.eql({});
       }
@@ -57,7 +57,7 @@ describe('index.test.js', function () {
         throw new Error('should not run this');
       } catch (e) {
         e.name.should.equal('RequestError');
-        e.message.should.equal('getaddrinfo ENOTFOUND');
+        e.message.should.equal('getaddrinfo ENOTFOUND (GET http://foo.co-urllib.com)');
         e.status.should.equal(-1);
         e.headers.should.eql({});
       }
@@ -218,7 +218,7 @@ describe('index.test.js', function () {
         throw new Error('should not run this');
       } catch(e) {
         e.name.should.equal('FollowRedirectError');
-        e.message.should.equal('Got statusCode 302 but cannot resolve next location from headers');
+        e.message.should.include('Got statusCode 302 but cannot resolve next location from headers (GET http://127.0.0.1:');
         e.status.should.equal(302);
         e.should.have.property('headers');
       }
@@ -233,6 +233,7 @@ describe('index.test.js', function () {
       } catch(e) {
         e.name.should.equal('MaxRedirectError');
         e.message.should.include('Exceeded 10 maxRedirects. Probably stuck in a redirect loop');
+        e.message.should.include('(GET http://127.0.0.1:');
         e.status.should.equal(302);
         e.headers.location.should.equal('/loop_redirect');
       }
@@ -336,7 +337,7 @@ describe('index.test.js', function () {
       } catch (e) {
         e.status.should.equal(408);
         e.name.should.equal('ConnectionTimeoutError');
-        e.message.should.equal('timeout of 10ms exceeded');
+        e.message.should.include('timeout of 10ms exceeded (GET http://127.0.0.1:');
         e.headers.should.eql({});
       }
     });
@@ -349,30 +350,32 @@ describe('index.test.js', function () {
         should.exist(e);
         e.status.should.equal(408);
         e.name.should.equal('ResponseTimeoutError');
-        e.message.should.equal('timeout of 2000ms exceeded');
+        e.message.should.include('timeout of 2000ms exceeded (GET http://127.0.0.1:');
         e.headers['content-type'].should.equal('application/octet-stream');
       }
     });
   });
 
   describe('options.gzip = true', function () {
+    var gzipurl = 'http://qtestbucket.qiniudn.com/dist/v0.10.28/SHASUMS.txt';
     it('should get gzip response and auto decode it', function *() {
-      var result = yield *urllib.request('http://r.cnpmjs.org/byte', {
-        dataType: 'json',
+      var result = yield *urllib.request(gzipurl, {
+        // dataType: 'json',
         gzip: true,
         timeout: 10000,
       });
       result.should.have.keys('data', 'status', 'headers');
       result.status.should.equal(200);
-      result.data.should.be.a.Object;
-      result.data.name.should.equal('byte');
-      result.headers['content-type'].should.equal('application/json');
+      result.data.toString().should.include('6eff580cc8460741155d42ef1ef537961194443f');
+      // result.data.should.be.a.Object;
+      // result.data.name.should.equal('byte');
+      // result.headers['content-type'].should.equal('application/json');
       result.headers['content-encoding'].should.equal('gzip');
     });
 
     it('should get gzip response and decode custom', function *() {
-      var result = yield *urllib.request('http://r.cnpmjs.org/byte', {
-        dataType: 'json',
+      var result = yield *urllib.request(gzipurl, {
+        // dataType: 'json',
         gzip: true,
         timeout: 10000,
         headers: {
@@ -383,10 +386,11 @@ describe('index.test.js', function () {
       result.status.should.equal(200);
       result.data.should.be.an.Buffer;
       result.data.length.should.above(0);
-      result.headers['content-type'].should.equal('application/json');
+      // result.headers['content-type'].should.equal('application/json');
       result.headers['content-encoding'].should.equal('gzip');
       var buf = yield gunzip(result.data);
-      JSON.parse(buf).name.should.equal('byte');
+      buf.toString().should.include('6eff580cc8460741155d42ef1ef537961194443f');
+      // JSON.parse(buf).name.should.equal('byte');
     });
 
     it('should get response with content-encoding', function *() {
