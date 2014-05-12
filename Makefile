@@ -1,4 +1,5 @@
 TESTS = test/*.test.js
+COV_TESTS = test/index.test.js
 REPORTER = spec
 TIMEOUT = 20000
 MOCHA_OPTS =
@@ -36,13 +37,13 @@ test-cov cov:
 		--reporter $(REPORTER) \
 		--timeout $(TIMEOUT) \
 		$(MOCHA_OPTS) \
-		$(TESTS)
+		$(COV_TESTS)
 	@$(BIN)cov coverage
 
 test-all: install jshint test
 
 autod: install
-	@$(BIN)autod -w -e example.js,callback_example.js
+	@$(BIN)autod -w -e example.js,callback_example.js --prefix "~"
 	@$(MAKE) install
 
 contributors: install

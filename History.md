@@ -1,8 +1,7 @@
 
-n.n.n / 2014-04-11 
+0.2.1 / 2014-04-11
 ==================
 
-  * Merge pull request #6 from node-modules/remove-aborted
   * remove res.aborted
 
 0.2.0 / 2014-04-08
@@ -17,17 +16,17 @@ n.n.n / 2014-04-11
  * update deps
  * use co-mocha
 
-0.1.3 / 2014-03-14 
+0.1.3 / 2014-03-14
 ==================
 
   * exports default USER_AGENT
 
-0.1.2 / 2014-03-13 
+0.1.2 / 2014-03-13
 ==================
 
   * JSONResponseFormatError should contains raw data
 
-0.1.1 / 2014-03-13 
+0.1.1 / 2014-03-13
 ==================
 
   * add status and headers to error
