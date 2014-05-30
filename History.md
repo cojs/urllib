@@ -1,4 +1,10 @@
 
+0.2.3 / 2014-05-30
+==================
+
+  * Merge pull request #8 from coderhaoxin/dataType
+  * when dataType is text, convert to string
+
 0.2.2 / 2014-05-12
 ==================
 

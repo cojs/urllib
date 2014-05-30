@@ -8,7 +8,7 @@ SRC = $(wildcard lib/*.js)
 BUILD = $(subst lib/,build/,$(SRC))
 
 install:
-	@npm install --registry=http://r.cnpmjs.org --disturl=http://dist.cnpmjs.org
+	@npm install --registry=http://registry.npm.taobao.org
 
 build:
 	@mkdir -p build
