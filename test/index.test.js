@@ -329,6 +329,15 @@ describe('index.test.js', function () {
     });
   });
 
+  describe('options.dataType = text', function () {
+    it('should got json', function *() {
+      var result = yield *urllib.request(host + '/json', {dataType: 'text'});
+      result.should.have.keys('data', 'status', 'headers');
+      result.status.should.equal(200);
+      result.data.should.eql(JSON.stringify({foo: 'bar'}));
+    });
+  });
+
   describe('options.timeout', function () {
     it('should throw ConnectionTimeoutError', function *() {
       try {
