@@ -30,7 +30,7 @@
   "dependencies": {
     "co-assert-timeout": "~0.0.4",
     "co-readall": "~0.0.1",
-    "debug": "~0.8.1",
+    "debug": "~2.6.9",
     "default-user-agent": "~0.0.1",
     "generator-supported": "~0.0.1",
     "thunkify": "~2.1.1"
