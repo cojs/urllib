@@ -30,25 +30,25 @@
   "dependencies": {
     "co-assert-timeout": "~0.0.4",
     "co-readall": "~0.0.1",
-    "debug": "~0.8.1",
-    "default-user-agent": "~0.0.1",
+    "debug": "~2.2.0",
+    "default-user-agent": "~1.0.0",
     "generator-supported": "~0.0.1",
     "thunkify": "~2.1.1"
   },
   "devDependencies": {
     "ali.regenerator": "*",
     "autod": "*",
-    "co": "~3.0.6",
+    "co": "~4.6.0",
     "co-mocha": "*",
     "co-sleep": "~0.0.1",
     "contributors": "*",
     "cov": "*",
     "istanbul-harmony": "*",
     "jshint": "*",
-    "koa": "~0.6.0",
-    "koa-middlewares": "~0.1.3",
+    "koa": "~1.1.2",
+    "koa-middlewares": "~4.1.0",
     "mocha": "*",
-    "should": "~3.3.1",
-    "speeds": "~0.0.1"
+    "should": "~8.0.2",
+    "speeds": "~1.0.0"
   }
 }
